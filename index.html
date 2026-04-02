@@ -1,0 +1,4205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cronograma Choferes 2026 – RAP Lavalleja ASSE UE042</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0f1117;
+    --surface:   #181c27;
+    --border:    #2a2f3e;
+    --accent:    #2E75B6;
+
+    --dl-bg:     #1B5E20;
+    --dl-fg:     #ffffff;
+    --ma-bg:     #BF360C;
+    --ma-fg:     #ffffff;
+    --pais-bg:   #f5c800;
+    --pais-fg:   #5a007a;
+    --libre-bg:  #2d1f4a;
+    --libre-fg:  #c9a8ff;
+    --reten-bg:  #1e2230;
+    --reten-fg:  #8899bb;
+    --obs-bg:    #181c27;
+    --obs-fg:    #8899aa;
+    --dom-bg:    #221a33;
+    --dom-fg:    #c9a8ff;
+
+    --head-bg:   #1F3864;
+    --head-fg:   #ffffff;
+
+    --ret-title: #6b2400;
+    --ret-head:  #8b3a14;
+    --ret-alt:   #2a1a12;
+    --ret-total: #6b2400;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: #cdd6f4;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: linear-gradient(135deg, #0d1b3e 0%, #1a2a5e 50%, #0d1b3e 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 28px 40px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
+  .site-header h1 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #fff;
+    text-transform: uppercase;
+  }
+  .site-header p {
+    font-size: 0.78rem;
+    color: #7fa8d4;
+    margin-top: 3px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── TABS ── */
+  .tabs-wrap {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    overflow-x: auto;
+    display: flex;
+    gap: 2px;
+    white-space: nowrap;
+    scrollbar-width: thin;
+  }
+  .tab-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: transparent;
+    border: none;
+    color: #6a7a99;
+    padding: 14px 18px 12px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .tab-btn:hover { color: #aabbd4; border-bottom-color: #3a5080; }
+  .tab-btn.active { color: #fff; border-bottom-color: var(--accent); background: rgba(46,117,182,0.08); }
+  .tab-year { font-size: 0.65rem; font-weight: 400; opacity: 0.6; }
+
+  /* ── MONTH SECTION ── */
+  .month-section { padding: 32px 40px 60px; max-width: 1400px; margin: 0 auto; }
+
+  .month-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .month-header h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #e8eeff;
+  }
+  .month-header .subtitle {
+    font-size: 0.8rem;
+    color: #5a6a88;
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── TABLA PRINCIPAL ── */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .cronograma {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .cronograma thead tr {
+    background: var(--head-bg);
+  }
+  .cronograma thead th {
+    color: var(--head-fg);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 12px 10px;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    white-space: nowrap;
+  }
+  .cronograma thead th small {
+    display: block;
+    font-weight: 400;
+    font-size: 0.65rem;
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+
+  .cronograma tbody tr { border-bottom: 1px solid var(--border); }
+  .cronograma tbody tr:last-child { border-bottom: none; }
+
+  .cronograma td {
+    padding: 7px 10px;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    white-space: nowrap;
+  }
+  .cronograma td:last-child { border-right: none; text-align: left; white-space: normal; min-width: 200px; font-size: 0.75rem; }
+
+  /* Filas */
+  .row-norm { background: #141820; }
+  .row-alt  { background: #181e2c; }
+  .row-dom  { background: var(--dom-bg); }
+
+  /* Columnas especiales */
+  .col-dia  { font-weight: 700; color: #cdd6f4; width: 44px; }
+  .col-jor  { color: #6a7a99; font-size: 0.75rem; width: 54px; }
+  .dom-row  { background: var(--dom-bg) !important; color: var(--dom-fg) !important; font-weight: 600; }
+
+  /* CHOFER CELLS */
+  td.dl     { background: var(--dl-bg);    color: var(--dl-fg);    font-weight: 500; }
+  td.ma     { background: var(--ma-bg);    color: var(--ma-fg);    font-weight: 500; }
+  td.pais   { background: var(--pais-bg);  color: var(--pais-fg);  font-weight: 500; }
+  td.libre  { background: var(--libre-bg); color: var(--libre-fg); font-style: italic; }
+  td.reten  { background: var(--reten-bg); color: var(--reten-fg); font-weight: 700; font-size: 0.9rem; letter-spacing: 0.1em; }
+  td.obs    { background: var(--obs-bg);   color: var(--obs-fg);   font-family: 'DM Sans', sans-serif; font-size: 0.75rem; }
+
+  /* ── LEYENDA ── */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 20px 0 0;
+    align-items: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.75rem;
+    color: #8899aa;
+  }
+  .legend-dot {
+    width: 14px; height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* ── RETÉN TABLE ── */
+  .reten-section {
+    margin-top: 40px;
+  }
+  .reten-section h3 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #ff8c5a;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .reten-table {
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    min-width: 360px;
+  }
+  .reten-table th {
+    background: var(--ret-head);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .reten-table td {
+    padding: 7px 18px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+  }
+  .reten-alt td { background: var(--ret-alt); }
+  .reten-val { color: #ffb380; font-weight: 600; }
+  .reten-total td {
+    background: var(--ret-total);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    border-top: 2px solid rgba(255,140,90,0.4);
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    .site-header, .tabs-wrap { display: none; }
+    .month-section { display: block !important; padding: 0; }
+    .table-wrap { box-shadow: none; border: 1px solid #ccc; }
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .site-header { padding: 16px 20px; }
+    .month-section { padding: 20px 16px 40px; }
+    .cronograma td:last-child { min-width: 120px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <h1>Cronograma de Choferes 2026</h1>
+  <p>RAP Lavalleja &nbsp;·&nbsp; ASSE UE042 &nbsp;·&nbsp; Cobertura 24×7</p>
+</header>
+
+<nav class="tabs-wrap">
+<button class="tab-btn active" onclick="showMonth(0)">Abril<span class="tab-year">2026</span></button>
+<button class="tab-btn " onclick="showMonth(1)">Mayo<span class="tab-year">2026</span></button>
+<button class="tab-btn " onclick="showMonth(2)">Junio<span class="tab-year">2026</span></button>
+<button class="tab-btn " onclick="showMonth(3)">Julio<span class="tab-year">2026</span></button>
+<button class="tab-btn " onclick="showMonth(4)">Agosto<span class="tab-year">2026</span></button>
+<button class="tab-btn " onclick="showMonth(5)">Septiembre<span class="tab-year">2026</span></button>
+<button class="tab-btn " onclick="showMonth(6)">Octubre<span class="tab-year">2026</span></button>
+<button class="tab-btn " onclick="showMonth(7)">Noviembre<span class="tab-year">2026</span></button>
+<button class="tab-btn " onclick="showMonth(8)">Diciembre<span class="tab-year">2026</span></button>
+
+</nav>
+
+<main>
+
+    <section id="month-0" class="month-section" style="display:block">
+      <div class="month-header">
+        <h2>ABRIL 2026</h2>
+        <p class="subtitle">RAP Lavalleja – ASSE UE042 &nbsp;|&nbsp; Cobertura 24×7</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="cronograma">
+          <thead>
+            <tr>
+              <th class="th-dia">DÍA</th>
+              <th class="th-jor">JORNADA</th>
+              <th class="th-dl">De Leon<br><small>48 hs/sem</small></th>
+              <th class="th-ma">Machado<br><small>48 hs/sem</small></th>
+              <th class="th-pais">País<br><small>36 hs/sem</small></th>
+              <th class="th-ret">RETÉN</th>
+              <th class="th-obs">OBSERVACIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-norm">
+            <td class="col-dia">1</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">2</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">3</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">4</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">5</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">D</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">6</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">7</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">8</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">9</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">10</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">MACHADO de 23:00 de V a 03:00 SAB</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">11</td>
+            <td class="col-jor">SÁB</td>
+            <td class="libre">Libre</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">03:00-15:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">12 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">12</td>
+            <td class="dom-row">DOM</td>
+            <td class="dl">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">8 hs presencial y 16hs retén De Leon // 8hs de retén Machado</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">13</td>
+            <td class="col-jor">LUN</td>
+            <td class="libre">Libre</td>
+            <td class="ma">07:00-15:00</td>
+            <td class="pais">15:00-23:00</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">14</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">15</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">16</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">17</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">D</td>
+            <td class="obs">de 03:00 a 07:00 retén</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">18</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">19</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">M</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">20</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">21</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">22</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">D</td>
+            <td class="obs">de 03:00 a 07:00 retén // 4 hs Ricardo</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">23</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">24</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">25</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00 a 23:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">8 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">26</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="ma">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">8 hs presencial y 16hs retén Machado // 8hs de retén De Leon</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">27</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00-23:00</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">28</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">29</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">30</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="reten-section">
+        <h3>RESUMEN HORAS RETÉN – ABRIL 2026</h3>
+        <table class="reten-table">
+          <thead>
+            <tr>
+              <th>DÍA</th><th>JORNADA</th><th>DE LEON (hs)</th><th>MACHADO (hs)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="">
+            <td class="col-dia">5</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">6</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">7</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">8</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">9</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">10</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">12</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">16</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">13</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">17</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">19</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">20</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">21</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">22</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">23</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">24</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">26</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">16</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">27</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-total">
+        <td colspan="2">TOTAL MES</td>
+        <td>88</td>
+        <td>80</td>
+    </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="month-1" class="month-section" style="display:none">
+      <div class="month-header">
+        <h2>MAYO 2026</h2>
+        <p class="subtitle">RAP Lavalleja – ASSE UE042 &nbsp;|&nbsp; Cobertura 24×7</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="cronograma">
+          <thead>
+            <tr>
+              <th class="th-dia">DÍA</th>
+              <th class="th-jor">JORNADA</th>
+              <th class="th-dl">De Leon<br><small>48 hs/sem</small></th>
+              <th class="th-ma">Machado<br><small>48 hs/sem</small></th>
+              <th class="th-pais">País<br><small>36 hs/sem</small></th>
+              <th class="th-ret">RETÉN</th>
+              <th class="th-obs">OBSERVACIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-norm">
+            <td class="col-dia">1</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">M</td>
+            <td class="obs">de 03:00 a 07:00 retén</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">2</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00 a 23:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">8 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">3</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">D</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">4</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">5</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">6</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">7</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">8</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">DE LEON de 23:00 de V a 03:00 SAB</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">9</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">03:00-15:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">12 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">10</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="ma">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">8 hs presencial y 16hs retén Machado // 8hs de retén De Leon</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">11</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00-23:00</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">12</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">13</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">14</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">15</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">M</td>
+            <td class="obs">de 03:00 a 07:00 retén</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">16</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">17</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">D</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">18</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">19</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">20</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">M</td>
+            <td class="obs">de 03:00 a 07:00 retén // 4 hs Ricardo</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">21</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">22</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">23</td>
+            <td class="col-jor">SÁB</td>
+            <td class="libre">Libre</td>
+            <td class="ma">07:00-15:00</td>
+            <td class="pais">15:00 a 23:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">8 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">24</td>
+            <td class="dom-row">DOM</td>
+            <td class="dl">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">8 hs presencial y 16hs retén De Leon // 8hs de retén Machado</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">25</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">26</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">27</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">28</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">29</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">30</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">31</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">D</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="reten-section">
+        <h3>RESUMEN HORAS RETÉN – MAYO 2026</h3>
+        <table class="reten-table">
+          <thead>
+            <tr>
+              <th>DÍA</th><th>JORNADA</th><th>DE LEON (hs)</th><th>MACHADO (hs)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="">
+            <td class="col-dia">1</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">3</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">4</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">5</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">6</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">7</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">8</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">10</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">16</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">11</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">15</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">17</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">18</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">19</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">20</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">21</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">22</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">24</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">16</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">31</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-total">
+        <td colspan="2">TOTAL MES</td>
+        <td>88</td>
+        <td>88</td>
+    </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="month-2" class="month-section" style="display:none">
+      <div class="month-header">
+        <h2>JUNIO 2026</h2>
+        <p class="subtitle">RAP Lavalleja – ASSE UE042 &nbsp;|&nbsp; Cobertura 24×7</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="cronograma">
+          <thead>
+            <tr>
+              <th class="th-dia">DÍA</th>
+              <th class="th-jor">JORNADA</th>
+              <th class="th-dl">De Leon<br><small>48 hs/sem</small></th>
+              <th class="th-ma">Machado<br><small>48 hs/sem</small></th>
+              <th class="th-pais">País<br><small>36 hs/sem</small></th>
+              <th class="th-ret">RETÉN</th>
+              <th class="th-obs">OBSERVACIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-norm">
+            <td class="col-dia">1</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">2</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">3</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">4</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">5</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">MACHADO de 23:00 de V a 03:00 SAB</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">6</td>
+            <td class="col-jor">SÁB</td>
+            <td class="libre">Libre</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">03:00-15:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">12 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">7</td>
+            <td class="dom-row">DOM</td>
+            <td class="dl">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">8 hs presencial y 16hs retén De Leon // 8hs de retén Machado</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">8</td>
+            <td class="col-jor">LUN</td>
+            <td class="libre">Libre</td>
+            <td class="ma">07:00-15:00</td>
+            <td class="pais">15:00-23:00</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">9</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">10</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">11</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">12</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">D</td>
+            <td class="obs">de 03:00 a 07:00 retén</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">13</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">14</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">M</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">15</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">16</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">17</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">D</td>
+            <td class="obs">de 03:00 a 07:00 retén // 4 hs Ricardo</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">18</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">19</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">20</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00 a 23:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">8 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">21</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="ma">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">8 hs presencial y 16hs retén Machado // 8hs de retén De Leon</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">22</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00-23:00</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">23</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">24</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">25</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">26</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">M</td>
+            <td class="obs">de 03:00 a 07:00 retén</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">27</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00 a 23:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">8 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">28</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">D</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">29</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">30</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="reten-section">
+        <h3>RESUMEN HORAS RETÉN – JUNIO 2026</h3>
+        <table class="reten-table">
+          <thead>
+            <tr>
+              <th>DÍA</th><th>JORNADA</th><th>DE LEON (hs)</th><th>MACHADO (hs)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="">
+            <td class="col-dia">1</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">2</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">3</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">4</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">5</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">7</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">16</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">8</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">12</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">14</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">15</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">16</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">17</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">18</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">19</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">21</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">16</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">22</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">26</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">28</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">29</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">30</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-total">
+        <td colspan="2">TOTAL MES</td>
+        <td>96</td>
+        <td>96</td>
+    </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="month-3" class="month-section" style="display:none">
+      <div class="month-header">
+        <h2>JULIO 2026</h2>
+        <p class="subtitle">RAP Lavalleja – ASSE UE042 &nbsp;|&nbsp; Cobertura 24×7</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="cronograma">
+          <thead>
+            <tr>
+              <th class="th-dia">DÍA</th>
+              <th class="th-jor">JORNADA</th>
+              <th class="th-dl">De Leon<br><small>48 hs/sem</small></th>
+              <th class="th-ma">Machado<br><small>48 hs/sem</small></th>
+              <th class="th-pais">País<br><small>36 hs/sem</small></th>
+              <th class="th-ret">RETÉN</th>
+              <th class="th-obs">OBSERVACIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-norm">
+            <td class="col-dia">1</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">2</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">3</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">DE LEON de 23:00 de V a 03:00 SAB</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">4</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">03:00-15:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">12 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">5</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="ma">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">8 hs presencial y 16hs retén Machado // 8hs de retén De Leon</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">6</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00-23:00</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">7</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">8</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">9</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">10</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">M</td>
+            <td class="obs">de 03:00 a 07:00 retén</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">11</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">12</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">D</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">13</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">14</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">15</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">M</td>
+            <td class="obs">de 03:00 a 07:00 retén // 4 hs Ricardo</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">16</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">17</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">18</td>
+            <td class="col-jor">SÁB</td>
+            <td class="libre">Libre</td>
+            <td class="ma">07:00-15:00</td>
+            <td class="pais">15:00 a 23:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">8 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">19</td>
+            <td class="dom-row">DOM</td>
+            <td class="dl">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">8 hs presencial y 16hs retén De Leon // 8hs de retén Machado</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">20</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">21</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">22</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">23</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">24</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">25</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">26</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">D</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">27</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">28</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">29</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">30</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">31</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">MACHADO de 23:00 de V a 03:00 SAB</td>
+        </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="reten-section">
+        <h3>RESUMEN HORAS RETÉN – JULIO 2026</h3>
+        <table class="reten-table">
+          <thead>
+            <tr>
+              <th>DÍA</th><th>JORNADA</th><th>DE LEON (hs)</th><th>MACHADO (hs)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="">
+            <td class="col-dia">1</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">2</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">3</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">5</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">16</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">6</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">10</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">12</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">13</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">14</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">15</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">16</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">17</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">19</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">16</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">26</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">27</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">28</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">29</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">30</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">31</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-total">
+        <td colspan="2">TOTAL MES</td>
+        <td>88</td>
+        <td>96</td>
+    </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="month-4" class="month-section" style="display:none">
+      <div class="month-header">
+        <h2>AGOSTO 2026</h2>
+        <p class="subtitle">RAP Lavalleja – ASSE UE042 &nbsp;|&nbsp; Cobertura 24×7</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="cronograma">
+          <thead>
+            <tr>
+              <th class="th-dia">DÍA</th>
+              <th class="th-jor">JORNADA</th>
+              <th class="th-dl">De Leon<br><small>48 hs/sem</small></th>
+              <th class="th-ma">Machado<br><small>48 hs/sem</small></th>
+              <th class="th-pais">País<br><small>36 hs/sem</small></th>
+              <th class="th-ret">RETÉN</th>
+              <th class="th-obs">OBSERVACIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-norm">
+            <td class="col-dia">1</td>
+            <td class="col-jor">SÁB</td>
+            <td class="libre">Libre</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">03:00-15:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">12 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">2</td>
+            <td class="dom-row">DOM</td>
+            <td class="dl">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">8 hs presencial y 16hs retén De Leon // 8hs de retén Machado</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">3</td>
+            <td class="col-jor">LUN</td>
+            <td class="libre">Libre</td>
+            <td class="ma">07:00-15:00</td>
+            <td class="pais">15:00-23:00</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">4</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">5</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">6</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">7</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">D</td>
+            <td class="obs">de 03:00 a 07:00 retén</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">8</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">9</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">M</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">10</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">11</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">12</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">D</td>
+            <td class="obs">de 03:00 a 07:00 retén // 4 hs Ricardo</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">13</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">14</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">15</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00 a 23:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">8 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">16</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="ma">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">8 hs presencial y 16hs retén Machado // 8hs de retén De Leon</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">17</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00-23:00</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">18</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">19</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">20</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">21</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">M</td>
+            <td class="obs">de 03:00 a 07:00 retén</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">22</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00 a 23:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">8 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">23</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">D</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">24</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">25</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">26</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">27</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">28</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">DE LEON de 23:00 de V a 03:00 SAB</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">29</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">03:00-15:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">12 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">30</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="ma">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">8 hs presencial y 16hs retén Machado // 8hs de retén De Leon</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">31</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00-23:00</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="reten-section">
+        <h3>RESUMEN HORAS RETÉN – AGOSTO 2026</h3>
+        <table class="reten-table">
+          <thead>
+            <tr>
+              <th>DÍA</th><th>JORNADA</th><th>DE LEON (hs)</th><th>MACHADO (hs)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="reten-alt">
+            <td class="col-dia">2</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">16</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">3</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">7</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">9</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">10</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">11</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">12</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">13</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">14</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">16</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">16</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">17</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">21</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">23</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">24</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">25</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">26</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">27</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">28</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">30</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">16</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">31</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-total">
+        <td colspan="2">TOTAL MES</td>
+        <td>104</td>
+        <td>104</td>
+    </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="month-5" class="month-section" style="display:none">
+      <div class="month-header">
+        <h2>SEPTIEMBRE 2026</h2>
+        <p class="subtitle">RAP Lavalleja – ASSE UE042 &nbsp;|&nbsp; Cobertura 24×7</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="cronograma">
+          <thead>
+            <tr>
+              <th class="th-dia">DÍA</th>
+              <th class="th-jor">JORNADA</th>
+              <th class="th-dl">De Leon<br><small>48 hs/sem</small></th>
+              <th class="th-ma">Machado<br><small>48 hs/sem</small></th>
+              <th class="th-pais">País<br><small>36 hs/sem</small></th>
+              <th class="th-ret">RETÉN</th>
+              <th class="th-obs">OBSERVACIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-norm">
+            <td class="col-dia">1</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">2</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">3</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">4</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">M</td>
+            <td class="obs">de 03:00 a 07:00 retén</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">5</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">6</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">D</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">7</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">8</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">9</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">M</td>
+            <td class="obs">de 03:00 a 07:00 retén // 4 hs Ricardo</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">10</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">11</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">12</td>
+            <td class="col-jor">SÁB</td>
+            <td class="libre">Libre</td>
+            <td class="ma">07:00-15:00</td>
+            <td class="pais">15:00 a 23:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">8 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">13</td>
+            <td class="dom-row">DOM</td>
+            <td class="dl">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">8 hs presencial y 16hs retén De Leon // 8hs de retén Machado</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">14</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">15</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">16</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">17</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">18</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">19</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">20</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">D</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">21</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">22</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">23</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">24</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">25</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">MACHADO de 23:00 de V a 03:00 SAB</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">26</td>
+            <td class="col-jor">SÁB</td>
+            <td class="libre">Libre</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">03:00-15:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">12 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">27</td>
+            <td class="dom-row">DOM</td>
+            <td class="dl">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">8 hs presencial y 16hs retén De Leon // 8hs de retén Machado</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">28</td>
+            <td class="col-jor">LUN</td>
+            <td class="libre">Libre</td>
+            <td class="ma">07:00-15:00</td>
+            <td class="pais">15:00-23:00</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">29</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">30</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="reten-section">
+        <h3>RESUMEN HORAS RETÉN – SEPTIEMBRE 2026</h3>
+        <table class="reten-table">
+          <thead>
+            <tr>
+              <th>DÍA</th><th>JORNADA</th><th>DE LEON (hs)</th><th>MACHADO (hs)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="reten-alt">
+            <td class="col-dia">4</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">6</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">7</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">8</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">9</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">10</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">11</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">13</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">16</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">20</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">21</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">22</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">23</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">24</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">25</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">27</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">16</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">28</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-total">
+        <td colspan="2">TOTAL MES</td>
+        <td>88</td>
+        <td>72</td>
+    </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="month-6" class="month-section" style="display:none">
+      <div class="month-header">
+        <h2>OCTUBRE 2026</h2>
+        <p class="subtitle">RAP Lavalleja – ASSE UE042 &nbsp;|&nbsp; Cobertura 24×7</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="cronograma">
+          <thead>
+            <tr>
+              <th class="th-dia">DÍA</th>
+              <th class="th-jor">JORNADA</th>
+              <th class="th-dl">De Leon<br><small>48 hs/sem</small></th>
+              <th class="th-ma">Machado<br><small>48 hs/sem</small></th>
+              <th class="th-pais">País<br><small>36 hs/sem</small></th>
+              <th class="th-ret">RETÉN</th>
+              <th class="th-obs">OBSERVACIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-norm">
+            <td class="col-dia">1</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">2</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">D</td>
+            <td class="obs">de 03:00 a 07:00 retén</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">3</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">4</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">M</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">5</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">6</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">7</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">D</td>
+            <td class="obs">de 03:00 a 07:00 retén // 4 hs Ricardo</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">8</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">9</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">10</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00 a 23:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">8 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">11</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="ma">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">8 hs presencial y 16hs retén Machado // 8hs de retén De Leon</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">12</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00-23:00</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">13</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">14</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">15</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">16</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">M</td>
+            <td class="obs">de 03:00 a 07:00 retén</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">17</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00 a 23:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">8 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">18</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">D</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">19</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">20</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">21</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">22</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">23</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">DE LEON de 23:00 de V a 03:00 SAB</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">24</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">03:00-15:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">12 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">25</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="ma">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">8 hs presencial y 16hs retén Machado // 8hs de retén De Leon</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">26</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00-23:00</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">27</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">28</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">29</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">30</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">M</td>
+            <td class="obs">de 03:00 a 07:00 retén</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">31</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="reten-section">
+        <h3>RESUMEN HORAS RETÉN – OCTUBRE 2026</h3>
+        <table class="reten-table">
+          <thead>
+            <tr>
+              <th>DÍA</th><th>JORNADA</th><th>DE LEON (hs)</th><th>MACHADO (hs)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="reten-alt">
+            <td class="col-dia">2</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">4</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">5</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">6</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">7</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">8</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">9</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">11</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">16</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">12</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">16</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">18</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">19</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">20</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">21</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">22</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">23</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">25</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">16</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">26</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">30</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-total">
+        <td colspan="2">TOTAL MES</td>
+        <td>80</td>
+        <td>104</td>
+    </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="month-7" class="month-section" style="display:none">
+      <div class="month-header">
+        <h2>NOVIEMBRE 2026</h2>
+        <p class="subtitle">RAP Lavalleja – ASSE UE042 &nbsp;|&nbsp; Cobertura 24×7</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="cronograma">
+          <thead>
+            <tr>
+              <th class="th-dia">DÍA</th>
+              <th class="th-jor">JORNADA</th>
+              <th class="th-dl">De Leon<br><small>48 hs/sem</small></th>
+              <th class="th-ma">Machado<br><small>48 hs/sem</small></th>
+              <th class="th-pais">País<br><small>36 hs/sem</small></th>
+              <th class="th-ret">RETÉN</th>
+              <th class="th-obs">OBSERVACIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-dom">
+            <td class="dom-row">1</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">D</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">2</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">3</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">4</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">M</td>
+            <td class="obs">de 03:00 a 07:00 retén // 4 hs Ricardo</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">5</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">6</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">7</td>
+            <td class="col-jor">SÁB</td>
+            <td class="libre">Libre</td>
+            <td class="ma">07:00-15:00</td>
+            <td class="pais">15:00 a 23:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">8 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">8</td>
+            <td class="dom-row">DOM</td>
+            <td class="dl">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">8 hs presencial y 16hs retén De Leon // 8hs de retén Machado</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">9</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">10</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">11</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">12</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">13</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">14</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">&nbsp;</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">15</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">D</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">16</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">17</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">18</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">19</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">20</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">MACHADO de 23:00 de V a 03:00 SAB</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">21</td>
+            <td class="col-jor">SÁB</td>
+            <td class="libre">Libre</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">03:00-15:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">12 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">22</td>
+            <td class="dom-row">DOM</td>
+            <td class="dl">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">8 hs presencial y 16hs retén De Leon // 8hs de retén Machado</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">23</td>
+            <td class="col-jor">LUN</td>
+            <td class="libre">Libre</td>
+            <td class="ma">07:00-15:00</td>
+            <td class="pais">15:00-23:00</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">24</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">25</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">26</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">27</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">D</td>
+            <td class="obs">de 03:00 a 07:00 retén</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">28</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">29</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">M</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">30</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="reten-section">
+        <h3>RESUMEN HORAS RETÉN – NOVIEMBRE 2026</h3>
+        <table class="reten-table">
+          <thead>
+            <tr>
+              <th>DÍA</th><th>JORNADA</th><th>DE LEON (hs)</th><th>MACHADO (hs)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="">
+            <td class="col-dia">1</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">2</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">3</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">4</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">5</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">6</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">8</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">16</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">15</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">16</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">17</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">18</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">19</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">20</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">22</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">16</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">23</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">27</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">29</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">30</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-total">
+        <td colspan="2">TOTAL MES</td>
+        <td>104</td>
+        <td>72</td>
+    </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="month-8" class="month-section" style="display:none">
+      <div class="month-header">
+        <h2>DICIEMBRE 2026</h2>
+        <p class="subtitle">RAP Lavalleja – ASSE UE042 &nbsp;|&nbsp; Cobertura 24×7</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="cronograma">
+          <thead>
+            <tr>
+              <th class="th-dia">DÍA</th>
+              <th class="th-jor">JORNADA</th>
+              <th class="th-dl">De Leon<br><small>48 hs/sem</small></th>
+              <th class="th-ma">Machado<br><small>48 hs/sem</small></th>
+              <th class="th-pais">País<br><small>36 hs/sem</small></th>
+              <th class="th-ret">RETÉN</th>
+              <th class="th-obs">OBSERVACIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-norm">
+            <td class="col-dia">1</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">2</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">D</td>
+            <td class="obs">de 03:00 a 07:00 retén // 4 hs Ricardo</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">3</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">4</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">5</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00 a 23:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">8 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">6</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="ma">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">8 hs presencial y 16hs retén Machado // 8hs de retén De Leon</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">7</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00-23:00</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">8</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">9</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">10</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">11</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">M</td>
+            <td class="obs">de 03:00 a 07:00 retén</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">12</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00 a 23:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">8 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">13</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">D</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">14</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">15</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">16</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">17</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">18</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">DE LEON de 23:00 de V a 03:00 SAB</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">19</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">03:00-15:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">12 hs Ricardo</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">20</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="ma">23:00 (S) - 23:00(D)</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">8 hs presencial y 16hs retén Machado // 8hs de retén De Leon</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">21</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="libre">Libre</td>
+            <td class="pais">15:00-23:00</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">22</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">23</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">24</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 07:00</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">25</td>
+            <td class="col-jor">VIE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">M</td>
+            <td class="obs">de 03:00 a 07:00 retén</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">26</td>
+            <td class="col-jor">SÁB</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">&nbsp;</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-dom">
+            <td class="dom-row">27</td>
+            <td class="dom-row">DOM</td>
+            <td class="libre">Libre</td>
+            <td class="libre">Libre</td>
+            <td class="pais">23:00 (S) - 23:00(D)</td>
+            <td class="reten">D</td>
+            <td class="obs">Ricardo 24hs</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">28</td>
+            <td class="col-jor">LUN</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">M</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">29</td>
+            <td class="col-jor">MAR</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+<tr class="row-alt">
+            <td class="col-dia">30</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="pais">23:00 - 03:00</td>
+            <td class="reten">M</td>
+            <td class="obs">de 03:00 a 07:00 retén // 4 hs Ricardo</td>
+        </tr>
+<tr class="row-norm">
+            <td class="col-dia">31</td>
+            <td class="col-jor">JUE</td>
+            <td class="dl">07:00-15:00</td>
+            <td class="ma">15:00-23:00</td>
+            <td class="libre">Libre</td>
+            <td class="reten">D</td>
+            <td class="obs">&nbsp;</td>
+        </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="reten-section">
+        <h3>RESUMEN HORAS RETÉN – DICIEMBRE 2026</h3>
+        <table class="reten-table">
+          <thead>
+            <tr>
+              <th>DÍA</th><th>JORNADA</th><th>DE LEON (hs)</th><th>MACHADO (hs)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="">
+            <td class="col-dia">1</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">2</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">3</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">4</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">6</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">16</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">7</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">11</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">13</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">14</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">15</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">16</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">17</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">18</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">20</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">16</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">21</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">25</td>
+            <td class="col-jor">VIE</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">27</td>
+            <td class="col-jor">DOM</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">28</td>
+            <td class="col-jor">LUN</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">29</td>
+            <td class="col-jor">MAR</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-alt">
+            <td class="col-dia">30</td>
+            <td class="col-jor">MIÉ</td>
+            <td class="reten-val">0</td>
+            <td class="reten-val">8</td>
+        </tr>
+<tr class="">
+            <td class="col-dia">31</td>
+            <td class="col-jor">JUE</td>
+            <td class="reten-val">8</td>
+            <td class="reten-val">0</td>
+        </tr>
+<tr class="reten-total">
+        <td colspan="2">TOTAL MES</td>
+        <td>88</td>
+        <td>112</td>
+    </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+</main>
+
+<script>
+function showMonth(idx) {
+  document.querySelectorAll('.month-section').forEach((s,i) => {
+    s.style.display = i === idx ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', i === idx);
+  });
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+
+</body>
+</html>
