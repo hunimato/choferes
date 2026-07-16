@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#16a34a">
+<title>Mis Mandados 🛒</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0f1410;
+    --surface:   #171e18;
+    --surface-2: #1f2a20;
+    --border:    #2b3a2d;
+    --accent:    #22c55e;
+    --accent-2:  #16a34a;
+    --accent-fg: #04120a;
+    --wa:        #25D366;
+    --text:      #e6efe7;
+    --text-dim:  #8ba491;
+    --danger:    #f87171;
+    --warn:      #fbbf24;
+    --radius:    16px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background:
+      radial-gradient(1200px 600px at 100% -10%, rgba(34,197,94,0.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(34,197,94,0.06), transparent 55%),
+      var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    -webkit-tap-highlight-color: transparent;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .app {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 16px 120px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    padding: calc(18px + env(safe-area-inset-top)) 4px 14px;
+    background: linear-gradient(180deg, var(--bg) 70%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  header .title { display: flex; align-items: center; gap: 10px; }
+  header h1 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  header .logo {
+    width: 42px; height: 42px;
+    display: grid; place-items: center;
+    font-size: 1.4rem;
+    background: linear-gradient(140deg, var(--accent), var(--accent-2));
+    border-radius: 13px;
+    box-shadow: 0 6px 18px rgba(34,197,94,0.35);
+  }
+  .icon-btn {
+    width: 42px; height: 42px;
+    display: grid; place-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 1.15rem;
+    cursor: pointer;
+    transition: transform .1s, background .2s;
+  }
+  .icon-btn:active { transform: scale(0.92); }
+
+  /* ── CARD / SECTION ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .section-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .section-head h2 {
+    font-size: 0.95rem; font-weight: 700; letter-spacing: 0.02em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .badge {
+    font-size: 0.72rem; font-weight: 700;
+    background: var(--surface-2); color: var(--text-dim);
+    padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border);
+  }
+  .badge.hot { background: rgba(251,191,36,0.14); color: var(--warn); border-color: rgba(251,191,36,0.3); }
+
+  /* ── COTIDIANOS (chips) ── */
+  .chips { display: flex; flex-wrap: wrap; gap: 9px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 9px 8px 9px 14px;
+    font-size: 0.9rem; font-weight: 600;
+    cursor: default;
+    transition: border-color .2s, opacity .2s;
+    user-select: none;
+  }
+  .chip.active { opacity: 0.45; border-color: var(--accent); }
+  .chip .plus {
+    width: 26px; height: 26px; flex: none;
+    display: grid; place-items: center;
+    border-radius: 999px; border: none;
+    background: linear-gradient(140deg, var(--accent), var(--accent-2));
+    color: var(--accent-fg);
+    font-size: 1.1rem; font-weight: 800; line-height: 1;
+    cursor: pointer;
+    transition: transform .1s;
+  }
+  .chip .plus:active { transform: scale(0.85); }
+  .chip.active .plus { background: var(--surface); color: var(--accent); border: 1px solid var(--accent); }
+  .chip .rm {
+    background: none; border: none; color: var(--text-dim);
+    font-size: 0.95rem; cursor: pointer; padding: 0 2px; display: none;
+  }
+  .chips.editing .chip .rm { display: inline; }
+  .chips.editing .chip .plus { display: none; }
+
+  .add-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: transparent; border: 1px dashed var(--border);
+    border-radius: 999px; padding: 9px 14px;
+    color: var(--text-dim); font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+  }
+
+  /* ── LISTA NECESITO ── */
+  ul.needed { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  ul.needed li {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    animation: pop .18s ease;
+  }
+  @keyframes pop { from { transform: translateY(-4px); opacity: 0; } to { transform: none; opacity: 1; } }
+  ul.needed li.done { opacity: 0.5; }
+  ul.needed li.done .name { text-decoration: line-through; }
+  .check {
+    width: 24px; height: 24px; flex: none;
+    border-radius: 8px; border: 2px solid var(--border);
+    background: transparent; cursor: pointer;
+    display: grid; place-items: center; color: var(--accent-fg);
+    font-size: 0.85rem; transition: background .15s, border-color .15s;
+  }
+  li.done .check { background: var(--accent); border-color: var(--accent); }
+  .needed .name { flex: 1; font-weight: 600; font-size: 0.98rem; }
+  .needed .del {
+    background: none; border: none; color: var(--text-dim);
+    font-size: 1.05rem; cursor: pointer; padding: 4px;
+  }
+  .empty {
+    text-align: center; color: var(--text-dim);
+    padding: 26px 10px; font-size: 0.92rem;
+  }
+  .empty .big { font-size: 2rem; display: block; margin-bottom: 8px; }
+
+  /* ── INPUT ROW ── */
+  .add-row { display: flex; gap: 8px; margin-top: 12px; }
+  input[type=text], input[type=tel] {
+    flex: 1; min-width: 0;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: var(--text); font-size: 1rem; font-family: inherit;
+  }
+  input::placeholder { color: var(--text-dim); }
+  input:focus { outline: none; border-color: var(--accent); }
+
+  .btn {
+    border: none; border-radius: 12px;
+    padding: 12px 16px; font-size: 0.95rem; font-weight: 700;
+    font-family: inherit; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    transition: transform .1s, filter .2s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn.primary { background: linear-gradient(140deg, var(--accent), var(--accent-2)); color: var(--accent-fg); }
+  .btn.wa { background: var(--wa); color: #04120a; }
+  .btn.ghost { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); }
+  .btn.block { width: 100%; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* ── CONFIG / NFC rows ── */
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 6px; font-weight: 600; }
+  .hint { font-size: 0.78rem; color: var(--text-dim); line-height: 1.45; margin-top: 6px; }
+  .hint code { background: var(--surface-2); padding: 1px 6px; border-radius: 6px; font-size: 0.9em; }
+
+  .nfc-status {
+    font-size: 0.82rem; padding: 10px 12px; border-radius: 10px;
+    background: var(--surface-2); border: 1px solid var(--border);
+    margin-top: 10px; display: none; line-height: 1.4;
+  }
+  .nfc-status.show { display: block; }
+  .nfc-status.ok { color: var(--accent); border-color: rgba(34,197,94,0.4); }
+  .nfc-status.err { color: var(--danger); border-color: rgba(248,113,113,0.4); }
+  .nfc-status.info { color: var(--warn); }
+
+  details.card > summary {
+    list-style: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.95rem; font-weight: 700;
+  }
+  details.card > summary::-webkit-details-marker { display: none; }
+  details.card > summary .chev { transition: transform .2s; color: var(--text-dim); }
+  details.card[open] > summary .chev { transform: rotate(180deg); }
+  details.card > summary + * { margin-top: 14px; }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom));
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface-2); border: 1px solid var(--border);
+    color: var(--text); padding: 12px 18px; border-radius: 999px;
+    font-size: 0.9rem; font-weight: 600; z-index: 100;
+    opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4); max-width: 90vw; text-align: center;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .fab {
+    position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom));
+    z-index: 40;
+  }
+  .footer-note { text-align: center; color: var(--text-dim); font-size: 0.75rem; padding: 8px 0 4px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="title">
+      <div class="logo">🛒</div>
+      <div>
+        <h1>Mis Mandados</h1>
+      </div>
+    </div>
+    <button class="icon-btn" id="btnConfig" title="Configuración" aria-label="Configuración">⚙️</button>
+  </header>
+
+  <!-- NECESITO COMPRAR -->
+  <section class="card">
+    <div class="section-head">
+      <h2>🔴 Necesito comprar <span class="badge hot" id="needCount">0</span></h2>
+      <button class="btn ghost" id="btnClearDone" style="padding:6px 12px;font-size:0.8rem;">Limpiar ✓</button>
+    </div>
+    <ul class="needed" id="neededList"></ul>
+    <div class="empty" id="neededEmpty">
+      <span class="big">✨</span>
+      No hay nada pendiente.<br>Tocá el <b>+</b> en un producto o agregá uno nuevo.
+    </div>
+    <div class="add-row">
+      <input type="text" id="quickAdd" placeholder="Agregar algo puntual…" autocomplete="off">
+      <button class="btn primary" id="btnQuickAdd">Agregar</button>
+    </div>
+  </section>
+
+  <!-- AVISAR -->
+  <section class="card">
+    <div class="section-head">
+      <h2>📲 Avisar la lista</h2>
+    </div>
+    <div class="btn-grid" id="waButtons"></div>
+    <button class="btn wa block" id="btnWaBoth" style="margin-top:10px;">
+      <span>💬</span> Avisar a los 2 contactos
+    </button>
+    <p class="hint" id="waHint">Configurá los 2 números en ⚙️ para habilitar el aviso por WhatsApp.</p>
+  </section>
+
+  <!-- COTIDIANOS -->
+  <section class="card">
+    <div class="section-head">
+      <h2>🥫 Cotidianos <span class="badge" id="cotiCount">0</span></h2>
+      <button class="btn ghost" id="btnEditCoti" style="padding:6px 12px;font-size:0.8rem;">Editar</button>
+    </div>
+    <div class="chips" id="cotiChips"></div>
+    <div class="add-row">
+      <input type="text" id="newCoti" placeholder="Nuevo cotidiano (ej: yerba)…" autocomplete="off">
+      <button class="btn ghost" id="btnAddCoti">+ Fijo</button>
+    </div>
+  </section>
+
+  <!-- NFC -->
+  <details class="card" id="nfcCard">
+    <summary>📡 Etiqueta NFC (NTAG215) <span class="chev">▾</span></summary>
+    <div>
+      <div class="btn-grid">
+        <button class="btn ghost" id="btnNfcLink">🔗 Grabar link app</button>
+        <button class="btn ghost" id="btnNfcSave">💾 Guardar lista</button>
+      </div>
+      <button class="btn ghost block" id="btnNfcRead" style="margin-top:10px;">📖 Leer etiqueta</button>
+      <div class="nfc-status" id="nfcStatus"></div>
+      <p class="hint">
+        <b>Grabar link app:</b> guarda la dirección de esta app en la etiqueta. Pegala en la heladera y al acercar el celular se abre sola.<br>
+        <b>Guardar lista:</b> escribe la lista actual dentro de la etiqueta.<br>
+        <b>Leer:</b> lee lo que tenga la etiqueta e importa la lista si corresponde.<br>
+        ⚠️ El NFC funciona en <b>Android + Chrome</b> por HTTPS. En iPhone el navegador no permite leer/escribir NFC desde la web.
+      </p>
+    </div>
+  </details>
+
+  <p class="footer-note">Se guarda todo en este celular · Mis Mandados</p>
+</div>
+
+<!-- CONFIG DIALOG -->
+<dialog id="configDialog" style="border:none;background:transparent;padding:0;max-width:92vw;">
+  <div class="card" style="width:420px;max-width:92vw;margin:0;">
+    <div class="section-head">
+      <h2>⚙️ Configuración</h2>
+      <button class="icon-btn" id="btnCloseConfig" style="width:34px;height:34px;font-size:1rem;">✕</button>
+    </div>
+    <p class="hint" style="margin-top:0;margin-bottom:14px;">Números con código de país, sin espacios ni signos. Ej: Uruguay <code>598 9x xxx xxx</code> → <code>5989xxxxxxx</code>.</p>
+    <div class="field">
+      <label>Contacto 1 — nombre</label>
+      <input type="text" id="name1" placeholder="Ej: Mamá" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Contacto 1 — WhatsApp</label>
+      <input type="tel" id="phone1" placeholder="5989xxxxxxx" inputmode="numeric" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Contacto 2 — nombre</label>
+      <input type="text" id="name2" placeholder="Ej: Papá" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Contacto 2 — WhatsApp</label>
+      <input type="tel" id="phone2" placeholder="5989xxxxxxx" inputmode="numeric" autocomplete="off">
+    </div>
+    <button class="btn primary block" id="btnSaveConfig">Guardar</button>
+  </div>
+</dialog>
+
+<div id="toast"></div>
+
+<script>
+"use strict";
+
+/* ───────────── Estado ───────────── */
+const DEFAULT_COTI = ["Leche","Agua","Pan","Huevos","Yerba","Café","Azúcar","Fideos","Arroz","Aceite","Papel higiénico","Detergente"];
+
+const store = {
+  get coti()   { return JSON.parse(localStorage.getItem("mm_coti")   || "null") || DEFAULT_COTI.slice(); },
+  set coti(v)  { localStorage.setItem("mm_coti", JSON.stringify(v)); },
+  get need()   { return JSON.parse(localStorage.getItem("mm_need")   || "[]"); },
+  set need(v)  { localStorage.setItem("mm_need", JSON.stringify(v)); },
+  get cfg()    { return JSON.parse(localStorage.getItem("mm_cfg")    || "{}"); },
+  set cfg(v)   { localStorage.setItem("mm_cfg", JSON.stringify(v)); },
+};
+
+// need item: { id, name, done }
+let coti = store.coti;         // array de strings
+let need = store.need;         // array de objetos
+let cfg  = store.cfg;          // { name1, phone1, name2, phone2 }
+let editingCoti = false;
+
+/* ───────────── Utilidades ───────────── */
+const $ = (s) => document.querySelector(s);
+const norm = (s) => s.trim().replace(/\s+/g, " ");
+const key  = (s) => norm(s).toLowerCase();
+const uid  = () => (Date.now().toString(36) + Math.random().toString(36).slice(2, 6));
+
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+function save() { store.need = need; store.coti = coti; }
+
+/* ───────────── Render ───────────── */
+function isNeeded(name) { return need.some((n) => key(n.name) === key(name)); }
+
+function renderCoti() {
+  const box = $("#cotiChips");
+  box.classList.toggle("editing", editingCoti);
+  box.innerHTML = "";
+  coti.forEach((name) => {
+    const active = isNeeded(name);
+    const chip = document.createElement("div");
+    chip.className = "chip" + (active ? " active" : "");
+    const label = document.createElement("span");
+    label.textContent = name;
+    chip.appendChild(label);
+
+    const plus = document.createElement("button");
+    plus.className = "plus";
+    plus.textContent = active ? "✓" : "+";
+    plus.title = active ? "Ya está en la lista" : "Agregar a necesito";
+    plus.addEventListener("click", () => addNeed(name));
+    chip.appendChild(plus);
+
+    const rm = document.createElement("button");
+    rm.className = "rm";
+    rm.textContent = "🗑";
+    rm.title = "Borrar cotidiano";
+    rm.addEventListener("click", () => {
+      coti = coti.filter((c) => c !== name);
+      save(); renderCoti();
+    });
+    chip.appendChild(rm);
+
+    box.appendChild(chip);
+  });
+  $("#cotiCount").textContent = coti.length;
+  $("#btnEditCoti").textContent = editingCoti ? "Listo" : "Editar";
+}
+
+function renderNeed() {
+  const ul = $("#neededList");
+  ul.innerHTML = "";
+  need.forEach((item) => {
+    const li = document.createElement("li");
+    li.className = item.done ? "done" : "";
+
+    const check = document.createElement("button");
+    check.className = "check";
+    check.textContent = item.done ? "✓" : "";
+    check.setAttribute("aria-label", "Marcar comprado");
+    check.addEventListener("click", () => {
+      item.done = !item.done;
+      save(); renderNeed();
+    });
+
+    const name = document.createElement("span");
+    name.className = "name";
+    name.textContent = item.name;
+
+    const del = document.createElement("button");
+    del.className = "del";
+    del.textContent = "✕";
+    del.setAttribute("aria-label", "Quitar");
+    del.addEventListener("click", () => {
+      need = need.filter((n) => n.id !== item.id);
+      save(); renderAll();
+    });
+
+    li.append(check, name, del);
+    ul.appendChild(li);
+  });
+  const count = need.filter((n) => !n.done).length;
+  $("#needCount").textContent = count;
+  $("#neededEmpty").style.display = need.length ? "none" : "block";
+  $("#neededList").style.display = need.length ? "flex" : "none";
+}
+
+function renderWa() {
+  const box = $("#waButtons");
+  box.innerHTML = "";
+  const contacts = getContacts();
+  contacts.forEach((c) => {
+    const b = document.createElement("button");
+    b.className = "btn wa";
+    b.innerHTML = "💬 " + (c.name || c.phone);
+    b.addEventListener("click", () => sendWhatsApp(c.phone));
+    box.appendChild(b);
+  });
+  const has = contacts.length > 0;
+  $("#waHint").style.display = has ? "none" : "block";
+  $("#btnWaBoth").disabled = contacts.length < 1;
+  $("#btnWaBoth").style.display = has ? "flex" : "none";
+  box.style.display = has ? "grid" : "none";
+}
+
+function renderAll() { renderCoti(); renderNeed(); renderWa(); }
+
+/* ───────────── Acciones lista ───────────── */
+function addNeed(rawName) {
+  const name = norm(rawName);
+  if (!name) return;
+  if (isNeeded(name)) { toast("Ya está en la lista"); return; }
+  need.push({ id: uid(), name, done: false });
+  save(); renderAll();
+  toast("➕ " + name);
+}
+
+/* ───────────── WhatsApp ───────────── */
+function getContacts() {
+  const out = [];
+  if (cfg.phone1) out.push({ name: cfg.name1, phone: cfg.phone1 });
+  if (cfg.phone2) out.push({ name: cfg.name2, phone: cfg.phone2 });
+  return out;
+}
+
+function buildMessage() {
+  const pend = need.filter((n) => !n.done).map((n) => n.name);
+  if (!pend.length) return "🛒 ¡Lista de mandados al día! No hay nada pendiente.";
+  let msg = "🛒 *Lista de mandados:*\n";
+  pend.forEach((n) => { msg += "• " + n + "\n"; });
+  return msg.trim();
+}
+
+function sendWhatsApp(phone) {
+  const clean = String(phone).replace(/[^\d]/g, "");
+  if (!clean) { toast("Número inválido"); return; }
+  const url = "https://wa.me/" + clean + "?text=" + encodeURIComponent(buildMessage());
+  window.open(url, "_blank");
+}
+
+/* ───────────── NFC (Web NFC) ───────────── */
+const NFC_OK = ("NDEFReader" in window);
+
+function nfcMsg(text, kind) {
+  const el = $("#nfcStatus");
+  el.className = "nfc-status show " + (kind || "info");
+  el.innerHTML = text;
+}
+
+async function nfcWrite(records, okText) {
+  if (!NFC_OK) { nfcMsg("Este navegador no soporta NFC. Usá <b>Chrome en Android</b>.", "err"); return; }
+  try {
+    nfcMsg("📲 Acercá la etiqueta al celular…", "info");
+    const writer = new NDEFReader();
+    await writer.write({ records });
+    nfcMsg(okText, "ok");
+    toast("✅ Etiqueta grabada");
+  } catch (e) {
+    nfcMsg("No se pudo grabar: " + (e.message || e) + ".<br>Verificá que el NFC esté activado.", "err");
+  }
+}
+
+function btnNfcLinkClick() {
+  const url = location.href.split("#")[0];
+  nfcWrite([{ recordType: "url", data: url }], "✅ Link grabado. Al tocar la etiqueta se abrirá la app.");
+}
+
+function btnNfcSaveClick() {
+  const payload = "MANDADOS:" + JSON.stringify(need.filter((n) => !n.done).map((n) => n.name));
+  nfcWrite([{ recordType: "text", data: payload, lang: "es" }],
+    "✅ Lista guardada en la etiqueta (" + need.filter((n)=>!n.done).length + " ítems).");
+}
+
+async function btnNfcReadClick() {
+  if (!NFC_OK) { nfcMsg("Este navegador no soporta NFC. Usá <b>Chrome en Android</b>.", "err"); return; }
+  try {
+    nfcMsg("📖 Acercá la etiqueta para leer…", "info");
+    const reader = new NDEFReader();
+    await reader.scan();
+    reader.onreadingerror = () => nfcMsg("Error al leer la etiqueta.", "err");
+    reader.onreading = (event) => {
+      const dec = new TextDecoder();
+      for (const rec of event.message.records) {
+        if (rec.recordType === "url") {
+          nfcMsg("🔗 Link en la etiqueta:<br>" + dec.decode(rec.data), "ok");
+          return;
+        }
+        const txt = dec.decode(rec.data);
+        if (txt.startsWith("MANDADOS:")) {
+          try {
+            const arr = JSON.parse(txt.slice("MANDADOS:".length));
+            let added = 0;
+            arr.forEach((name) => { if (!isNeeded(name)) { need.push({ id: uid(), name, done: false }); added++; } });
+            save(); renderAll();
+            nfcMsg("✅ Importados " + added + " ítems desde la etiqueta.", "ok");
+          } catch (_) { nfcMsg("La etiqueta tiene una lista con formato inválido.", "err"); }
+          return;
+        }
+        nfcMsg("📄 Contenido: " + txt, "ok");
+        return;
+      }
+    };
+  } catch (e) {
+    nfcMsg("No se pudo leer: " + (e.message || e) + ".", "err");
+  }
+}
+
+/* ───────────── Config dialog ───────────── */
+function openConfig() {
+  $("#name1").value  = cfg.name1  || "";
+  $("#phone1").value = cfg.phone1 || "";
+  $("#name2").value  = cfg.name2  || "";
+  $("#phone2").value = cfg.phone2 || "";
+  $("#configDialog").showModal();
+}
+function saveConfig() {
+  cfg = {
+    name1:  norm($("#name1").value),
+    phone1: $("#phone1").value.replace(/[^\d]/g, ""),
+    name2:  norm($("#name2").value),
+    phone2: $("#phone2").value.replace(/[^\d]/g, ""),
+  };
+  store.cfg = cfg;
+  renderWa();
+  $("#configDialog").close();
+  toast("⚙️ Configuración guardada");
+}
+
+/* ───────────── Eventos ───────────── */
+$("#btnQuickAdd").addEventListener("click", () => {
+  const inp = $("#quickAdd");
+  addNeed(inp.value); inp.value = ""; inp.focus();
+});
+$("#quickAdd").addEventListener("keydown", (e) => { if (e.key === "Enter") $("#btnQuickAdd").click(); });
+
+$("#btnAddCoti").addEventListener("click", () => {
+  const inp = $("#newCoti");
+  const name = norm(inp.value);
+  if (!name) return;
+  if (coti.some((c) => key(c) === key(name))) { toast("Ya existe ese cotidiano"); inp.value=""; return; }
+  coti.push(name); save(); renderCoti();
+  inp.value = ""; inp.focus();
+  toast("🥫 " + name + " agregado a cotidianos");
+});
+$("#newCoti").addEventListener("keydown", (e) => { if (e.key === "Enter") $("#btnAddCoti").click(); });
+
+$("#btnEditCoti").addEventListener("click", () => { editingCoti = !editingCoti; renderCoti(); });
+
+$("#btnClearDone").addEventListener("click", () => {
+  const before = need.length;
+  need = need.filter((n) => !n.done);
+  save(); renderAll();
+  toast(before === need.length ? "Nada marcado" : "🧹 Comprados quitados");
+});
+
+$("#btnWaBoth").addEventListener("click", () => {
+  const contacts = getContacts();
+  if (!contacts.length) { toast("Configurá los números en ⚙️"); return; }
+  sendWhatsApp(contacts[0].phone);
+  if (contacts[1]) {
+    toast("Enviá al 1º y volvé para el 2º");
+    setTimeout(() => sendWhatsApp(contacts[1].phone), 1500);
+  }
+});
+
+$("#btnConfig").addEventListener("click", openConfig);
+$("#btnCloseConfig").addEventListener("click", () => $("#configDialog").close());
+$("#btnSaveConfig").addEventListener("click", saveConfig);
+$("#configDialog").addEventListener("click", (e) => { if (e.target.id === "configDialog") e.target.close(); });
+
+$("#btnNfcLink").addEventListener("click", btnNfcLinkClick);
+$("#btnNfcSave").addEventListener("click", btnNfcSaveClick);
+$("#btnNfcRead").addEventListener("click", btnNfcReadClick);
+
+if (!NFC_OK) {
+  // Aún así mostramos la sección; el estado avisará al tocar.
+  $("#nfcCard").querySelector("summary").insertAdjacentHTML(
+    "beforeend", ""
+  );
+}
+
+/* ───────────── Init ───────────── */
+renderAll();
+</script>
+</body>
+</html>
