@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#16a34a">
 <title>Mis Mandados 🛒</title>
+
+<!-- PWA / instalable -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+
+<!-- iOS: app en pantalla de inicio -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mandados">
+<link rel="apple-touch-icon" href="icon-180.png">
+
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -308,22 +321,53 @@
     </div>
   </section>
 
+  <!-- INSTALAR APP -->
+  <details class="card" id="installCard">
+    <summary>📱 Instalar como app <span class="chev">▾</span></summary>
+    <div id="installBody"></div>
+  </details>
+
   <!-- NFC -->
   <details class="card" id="nfcCard">
     <summary>📡 Etiqueta NFC (NTAG215) <span class="chev">▾</span></summary>
     <div>
-      <div class="btn-grid">
-        <button class="btn ghost" id="btnNfcLink">🔗 Grabar link app</button>
-        <button class="btn ghost" id="btnNfcSave">💾 Guardar lista</button>
+      <!-- Bloque Android (Web NFC disponible) -->
+      <div id="nfcAndroid" style="display:none;">
+        <div class="btn-grid">
+          <button class="btn ghost" id="btnNfcLink">🔗 Grabar link app</button>
+          <button class="btn ghost" id="btnNfcSave">💾 Guardar lista</button>
+        </div>
+        <button class="btn ghost block" id="btnNfcRead" style="margin-top:10px;">📖 Leer etiqueta</button>
+        <p class="hint">
+          <b>Grabar link app:</b> guarda el link de esta app en la etiqueta. La pegás en la heladera y al acercar el celular se abre sola.<br>
+          <b>Guardar lista:</b> escribe la lista actual dentro de la etiqueta.<br>
+          <b>Leer:</b> lee la etiqueta e importa la lista si corresponde.
+        </p>
       </div>
-      <button class="btn ghost block" id="btnNfcRead" style="margin-top:10px;">📖 Leer etiqueta</button>
+
+      <!-- Bloque iPhone / otros (sin Web NFC) -->
+      <div id="nfcApple" style="display:none;">
+        <p class="hint" style="margin-top:0;">
+          📲 <b>Tu iPhone lee las etiquetas solo:</b> al acercarlo a una etiqueta con un link, salta una notificación que abre esta app. No hace falta abrir nada.
+        </p>
+        <p class="hint" style="margin-top:10px;">
+          Apple no deja grabar NFC desde el navegador, así que la etiqueta se graba <b>una sola vez</b> con una app gratis:
+        </p>
+        <ol class="hint" style="margin:8px 0 0 18px;line-height:1.7;">
+          <li>Instalá <b>NFC Tools</b> (gratis, App Store).</li>
+          <li>Abrila → pestaña <b>Escribir</b> → <b>Añadir un registro</b> → <b>URL/URI</b>.</li>
+          <li>Pegá el link de abajo → <b>Aceptar</b> → <b>Escribir</b> y acercá la etiqueta.</li>
+          <li>¡Listo! Tocás la etiqueta con el iPhone y se abre la app. 🎉</li>
+        </ol>
+      </div>
+
+      <!-- Link para copiar (todos) -->
+      <div class="add-row" style="margin-top:12px;">
+        <input type="text" id="appUrl" readonly>
+        <button class="btn ghost" id="btnCopyUrl">Copiar</button>
+      </div>
+
       <div class="nfc-status" id="nfcStatus"></div>
-      <p class="hint">
-        <b>Grabar link app:</b> guarda la dirección de esta app en la etiqueta. Pegala en la heladera y al acercar el celular se abre sola.<br>
-        <b>Guardar lista:</b> escribe la lista actual dentro de la etiqueta.<br>
-        <b>Leer:</b> lee lo que tenga la etiqueta e importa la lista si corresponde.<br>
-        ⚠️ El NFC funciona en <b>Android + Chrome</b> por HTTPS. En iPhone el navegador no permite leer/escribir NFC desde la web.
-      </p>
     </div>
   </details>
 
@@ -660,11 +704,80 @@ $("#btnNfcLink").addEventListener("click", btnNfcLinkClick);
 $("#btnNfcSave").addEventListener("click", btnNfcSaveClick);
 $("#btnNfcRead").addEventListener("click", btnNfcReadClick);
 
-if (!NFC_OK) {
-  // Aún así mostramos la sección; el estado avisará al tocar.
-  $("#nfcCard").querySelector("summary").insertAdjacentHTML(
-    "beforeend", ""
-  );
+/* ───────────── Plataforma / instalación ───────────── */
+const UA = navigator.userAgent || "";
+const isIOS = /iPad|iPhone|iPod/.test(UA) ||
+              (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); // iPad iPadOS
+const isStandalone = window.matchMedia("(display-mode: standalone)").matches ||
+                     window.navigator.standalone === true;
+const APP_URL = location.href.split("#")[0];
+
+// Link para copiar
+$("#appUrl").value = APP_URL;
+$("#btnCopyUrl").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(APP_URL);
+    toast("🔗 Link copiado");
+  } catch (_) {
+    const i = $("#appUrl"); i.focus(); i.select();
+    toast("Seleccioná y copiá el link");
+  }
+});
+
+// Mostrar el bloque NFC correcto
+if (NFC_OK) {
+  $("#nfcAndroid").style.display = "block";
+} else {
+  $("#nfcApple").style.display = "block";
+}
+
+// Instrucciones de instalación
+function fillInstall() {
+  const box = $("#installBody");
+  if (isStandalone) {
+    box.innerHTML = '<p class="hint" style="margin-top:0;">✅ Ya estás usando la app instalada. ¡Perfecto!</p>';
+    return;
+  }
+  if (isIOS) {
+    box.innerHTML =
+      '<p class="hint" style="margin-top:0;">Para tenerla como app con su ícono en la pantalla de inicio:</p>' +
+      '<ol class="hint" style="margin:8px 0 0 18px;line-height:1.8;">' +
+      '<li>Abrí esta página en <b>Safari</b>.</li>' +
+      '<li>Tocá el botón <b>Compartir</b> <span style="font-size:1.1em;">􀈂</span> (el cuadrito con la flecha ↑).</li>' +
+      '<li>Elegí <b>Agregar a inicio</b>.</li>' +
+      '<li>Confirmá con <b>Agregar</b>. ¡Listo, ya tenés la app! 🎉</li>' +
+      '</ol>';
+  } else {
+    box.innerHTML =
+      '<p class="hint" style="margin-top:0;">En <b>Chrome (Android)</b>: menú ⋮ → <b>Instalar app</b> / <b>Agregar a la pantalla principal</b>. ' +
+      'También podés usar el botón que aparezca abajo cuando el celular lo ofrezca.</p>' +
+      '<button class="btn primary block" id="btnInstall" style="margin-top:12px;display:none;">⬇️ Instalar app</button>';
+  }
+}
+fillInstall();
+
+// beforeinstallprompt (Android/Chrome)
+let deferredPrompt = null;
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = document.getElementById("btnInstall");
+  if (btn) {
+    btn.style.display = "flex";
+    btn.onclick = async () => {
+      btn.style.display = "none";
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+    };
+  }
+});
+
+/* ───────────── Service Worker (offline) ───────────── */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
 }
 
 /* ───────────── Init ───────────── */
