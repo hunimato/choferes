@@ -408,7 +408,11 @@
 "use strict";
 
 /* ───────────── Estado ───────────── */
-const DEFAULT_COTI = ["Leche","Agua","Pan","Huevos","Yerba","Café","Azúcar","Fideos","Arroz","Aceite","Papel higiénico","Detergente"];
+const DEFAULT_COTI = [
+  "Leche","Agua","Pan","Huevos","Yerba","Café","Azúcar","Sal",
+  "Aceite","Fideos","Arroz","Harina","Manteca","Queso","Frutas","Verduras",
+  "Papel higiénico","Detergente","Jabón","Shampoo","Bolsas de basura","Pasta de dientes"
+];
 
 const store = {
   get coti()   { return JSON.parse(localStorage.getItem("mm_coti")   || "null") || DEFAULT_COTI.slice(); },

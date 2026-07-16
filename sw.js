@@ -1,5 +1,5 @@
 /* Service Worker — Mis Mandados (offline app shell) */
-const CACHE = "mandados-v1";
+const CACHE = "mandados-v2";
 const ASSETS = [
   "./mandados.html",
   "./manifest.webmanifest",
